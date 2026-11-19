@@ -51,47 +51,55 @@
   </head>
   <body class="bg-slate-950 text-slate-100 antialiased selection:bg-emerald-500 selection:text-white" style="background:#020617;color:#e2e8f0;margin:0;font-family:Tajawal,sans-serif;">
     <div id="root">
-      <main style="max-width:44rem;margin:0 auto;padding:2rem 1.25rem;line-height:1.7;">
-        <h1>سيارتك. هويتك. خصوصيتك.</h1>
-        <p>تواصل ذكي وفوري بين السائقين وأصحاب السيارات. بدون أرقام هواتف. بدون أجهزة تتبع. خصوصية تامة فقط.</p>
-        <p lang="en">Your Car. Your Identity. Your Privacy. Smart communication between drivers and car owners. No phone numbers. No trackers. Just privacy.</p>
-        <p><a href="/">ابدأ الآن</a> · <a href="#how-it-works">كيف يعمل</a></p>
-        <img src="/hero.webp" width="1280" height="853" alt="سيارة فاخرة — ملصق CAR-SILA للتواصل الخاص" />
+      <!-- Visible boot screen while the React bundle loads -->
+      <div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;padding:2rem;text-align:center;background:radial-gradient(ellipse at top,#083344 0%,#020617 55%);">
+        <img src="/favicon.png" width="56" height="56" alt="" style="border-radius:14px;box-shadow:0 0 0 1px rgba(34,211,238,.25);" />
+        <div style="font-size:1.35rem;font-weight:800;letter-spacing:.04em;color:#67e8f9;">CAR-SILA</div>
+        <div style="width:2rem;height:2rem;border:2px solid rgba(103,232,249,.25);border-top-color:#22d3ee;border-radius:999px;animation:carsila-spin .8s linear infinite;"></div>
+        <p style="margin:0;font-size:.9rem;color:#94a3b8;">جاري فتح التطبيق...</p>
+      </div>
+      <style>@keyframes carsila-spin{to{transform:rotate(360deg)}}</style>
 
-        <h2>المميزات</h2>
-        <h3>إشعارات فورية</h3>
-        <p>استقبل تنبيهات مباشرة حول سيارتك لحظة حدوثها.</p>
-        <h3>تواصل مجهول وآمن</h3>
-        <p>تحدث بأمان وسرية تامة دون كشف رقم هاتفك أو هويتك.</p>
-        <h3>بلاغات ذكية وسريعة</h3>
-        <p>أرسل واستقبل بلاغات مخصصة بضغطة زر واحدة.</p>
-        <h3>الخصوصية أولاً</h3>
-        <p>حماية بياناتك وخصوصيتك هي أولويتنا المطلقة.</p>
-
-        <h2 id="how-it-works">كيف يعمل</h2>
-        <p>خطوات بسيطة لتجربة تواصل ذكية وآمنة</p>
-        <ol>
-          <li><strong>سجل سيارتك</strong> — أنشئ حسابك وأضف تفاصيل سيارتك بسهولة.</li>
-          <li><strong>توليد كود QR</strong> — احصل على رمز QR فريد ومحمي لسيارتك.</li>
-          <li><strong>ثبته على سيارتك</strong> — اطبعه والصقه على زجاج السيارة أو الهيكل.</li>
-          <li><strong>استقبل وتجاوب</strong> — استلم التنبيهات وتواصل بشكل مجهول وفوري.</li>
-        </ol>
-
-        <h2>الأسئلة الشائعة</h2>
-        <h3>كيف يحمي CAR-SILA رقم هاتفي وخصوصيتي؟</h3>
-        <p>عندما يقوم أي شخص بمسح ملصق الـ QR الموجود على سيارتك، يفتح له نظام دردشة وإشعارات ذكي ومشفر. لا يرى الماسح رقم هاتفك أو اسمك الحقيقي.</p>
-        <h3>هل يحتاج الشخص الذي يمسح الـ QR إلى تثبيت أي تطبيق؟</h3>
-        <p>لا. أي شخص يمسح الرمز بكاميرا الهاتف العادية ويفتح الموقع فوراً بدون تسجيل وبدون تطبيق.</p>
-        <h3>ما هي أنواع البلاغات التي يمكن إرسالها؟</h3>
-        <p>بلاغات جاهزة مثل السيارة تغلق الطريق، الأنوار مضاءة، نافذة مفتوحة، حادث بسيط، بالإضافة لرسالة وصورة.</p>
-        <h3>كيف أحصل على ملصق الـ QR لسيارتي؟</h3>
-        <p>بعد تسجيل الحساب وإضافة السيارة يمكنك تنزيل الرمز للطباعة أو طلب ملصق جاهز.</p>
-        <h3>هل يمكنني إضافة أكثر من سيارة في حساب واحد؟</h3>
-        <p>نعم. يمكنك إدارة عدة سيارات من لوحة تحكم واحدة، لكل سيارة رمز QR مستقل.</p>
-
-        <h2>تواصل معنا</h2>
-        <p>غزة، فلسطين · <a href="mailto:neamahamad2003@gmail.com">neamahamad2003@gmail.com</a></p>
-      </main>
+      <!-- SEO copy for crawlers / no-JS; kept off-screen so boot UI stays clean -->
+      <div style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;" aria-hidden="true">
+        <main>
+          <h1>سيارتك. هويتك. خصوصيتك.</h1>
+          <p>تواصل ذكي وفوري بين السائقين وأصحاب السيارات. بدون أرقام هواتف. بدون أجهزة تتبع. خصوصية تامة فقط.</p>
+          <p lang="en">Your Car. Your Identity. Your Privacy. Smart communication between drivers and car owners. No phone numbers. No trackers. Just privacy.</p>
+          <p><a href="/">ابدأ الآن</a> · <a href="#how-it-works">كيف يعمل</a></p>
+          <img src="/hero.webp" width="1280" height="853" alt="سيارة فاخرة — ملصق CAR-SILA للتواصل الخاص" />
+          <h2>المميزات</h2>
+          <h3>إشعارات فورية</h3>
+          <p>استقبل تنبيهات مباشرة حول سيارتك لحظة حدوثها.</p>
+          <h3>تواصل مجهول وآمن</h3>
+          <p>تحدث بأمان وسرية تامة دون كشف رقم هاتفك أو هويتك.</p>
+          <h3>بلاغات ذكية وسريعة</h3>
+          <p>أرسل واستقبل بلاغات مخصصة بضغطة زر واحدة.</p>
+          <h3>الخصوصية أولاً</h3>
+          <p>حماية بياناتك وخصوصيتك هي أولويتنا المطلقة.</p>
+          <h2 id="how-it-works">كيف يعمل</h2>
+          <p>خطوات بسيطة لتجربة تواصل ذكية وآمنة</p>
+          <ol>
+            <li><strong>سجل سيارتك</strong> — أنشئ حسابك وأضف تفاصيل سيارتك بسهولة.</li>
+            <li><strong>توليد كود QR</strong> — احصل على رمز QR فريد ومحمي لسيارتك.</li>
+            <li><strong>ثبته على سيارتك</strong> — اطبعه والصقه على زجاج السيارة أو الهيكل.</li>
+            <li><strong>استقبل وتجاوب</strong> — استلم التنبيهات وتواصل بشكل مجهول وفوري.</li>
+          </ol>
+          <h2>الأسئلة الشائعة</h2>
+          <h3>كيف يحمي CAR-SILA رقم هاتفي وخصوصيتي؟</h3>
+          <p>عندما يقوم أي شخص بمسح ملصق الـ QR الموجود على سيارتك، يفتح له نظام دردشة وإشعارات ذكي ومشفر. لا يرى الماسح رقم هاتفك أو اسمك الحقيقي.</p>
+          <h3>هل يحتاج الشخص الذي يمسح الـ QR إلى تثبيت أي تطبيق؟</h3>
+          <p>لا. أي شخص يمسح الرمز بكاميرا الهاتف العادية ويفتح الموقع فوراً بدون تسجيل وبدون تطبيق.</p>
+          <h3>ما هي أنواع البلاغات التي يمكن إرسالها؟</h3>
+          <p>بلاغات جاهزة مثل السيارة تغلق الطريق، الأنوار مضاءة، نافذة مفتوحة، حادث بسيط، بالإضافة لرسالة وصورة.</p>
+          <h3>كيف أحصل على ملصق الـ QR لسيارتي؟</h3>
+          <p>بعد تسجيل الحساب وإضافة السيارة يمكنك تنزيل الرمز للطباعة أو طلب ملصق جاهز.</p>
+          <h3>هل يمكنني إضافة أكثر من سيارة في حساب واحد؟</h3>
+          <p>نعم. يمكنك إدارة عدة سيارات من لوحة تحكم واحدة، لكل سيارة رمز QR مستقل.</p>
+          <h2>تواصل معنا</h2>
+          <p>غزة، فلسطين · <a href="mailto:neamahamad2003@gmail.com">neamahamad2003@gmail.com</a></p>
+        </main>
+      </div>
     </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

@@ -33,12 +33,35 @@ A new report or message raises a short notice near the top of the page. It disap
 
 ## Privacy and security
 
-- The database is not opened from the browser. Only the server uses the database key, and row access is restricted.
+CAR-SILA was hardened with the same web-security mindset used in academic security work: find the weakness on the live product, prove it, then close it.
+
+Privacy stays first.
+
+- The database is not opened from the browser. Only the server uses the database key.
 - The user session is an HttpOnly cookie. A passerby is identified by a visit session, not by an account.
 - A public vehicle lookup does not return a phone, an email, or an owner id.
 - Report emails do not place the sender’s email address in the message body.
 - Owners sign in with email and password, or with Google. The administrator signs in with email and password only.
-- Sensitive requests are rate-limited, and the server adds baseline security headers.
+
+### Security hardening applied
+
+| Area | What was secured |
+| --- | --- |
+| Account enumeration | Registration no longer reveals whether an email is already registered |
+| Content Security Policy | CSP headers limit scripts, frames, and trusted external sources |
+| Error disclosure | API failures return a generic error to clients; details stay in server logs |
+| CORS | Cross-origin access is limited to an explicit allowlist, not open wildcards |
+| CSRF | State-changing requests require a matching CSRF token with the session |
+| Dependencies | Known package advisories were cleared with `npm audit` / `npm audit fix` |
+
+Also in place:
+
+- Rate limits on sensitive routes
+- Baseline security headers (`CSP`, `X-Frame-Options`, `Referrer-Policy`, and related controls)
+- Server-only secrets (`.env` is never committed)
+- Cookie-based sessions with careful cross-origin rules
+
+The goal is simple: keep communication useful, keep personal data hidden, and keep common web attacks out of the product path.
 
 ## Stack
 
