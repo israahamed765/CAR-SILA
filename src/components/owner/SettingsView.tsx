@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import {
   User,
@@ -24,15 +24,30 @@ export const SettingsView: React.FC = () => {
     t
   } = useApp();
 
-  const [name, setName] = useState(currentUser?.name || 'Ahmed Al-Masri');
-  const [email, setEmail] = useState(currentUser?.email || 'ahmed@carsila.com');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [emailNotifs, setEmailNotifs] = useState(true);
   const [pushNotifs, setPushNotifs] = useState(true);
   const [privateMode, setPrivateMode] = useState(true);
+  const [saving, setSaving] = useState(false);
 
-  const handleSaveProfile = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (!currentUser) return;
+    setName(currentUser.name || '');
+    setEmail(currentUser.email || '');
+  }, [currentUser?.id, currentUser?.name, currentUser?.email]);
+
+  const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (currentUser) updateProfile(name, email);
+    if (!currentUser || saving) return;
+    setSaving(true);
+    try {
+      await updateProfile(name, email);
+    } catch {
+      // Toast is shown by updateProfile / explain.
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -83,9 +98,12 @@ export const SettingsView: React.FC = () => {
           <div className="pt-2 flex justify-end">
             <button
               type="submit"
-              className="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-white font-bold text-xs shadow-md shadow-cyan-600/30 transition-all cursor-pointer"
+              disabled={saving}
+              className="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 disabled:opacity-60 disabled:cursor-wait text-white font-bold text-xs shadow-md shadow-cyan-600/30 transition-all cursor-pointer"
             >
-              {language === 'ar' ? 'حفظ التغييرات' : 'Save Changes'}
+              {saving
+                ? (language === 'ar' ? 'جاري الحفظ...' : 'Saving...')
+                : (language === 'ar' ? 'حفظ التغييرات' : 'Save Changes')}
             </button>
           </div>
         </form>

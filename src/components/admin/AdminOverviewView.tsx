@@ -254,14 +254,14 @@ export const AdminOverviewView: React.FC = () => {
                     +{card.week}
                   </span>
                 )}
-              </div>
+          </div>
               <div className="mt-3 text-2xl font-black">{card.value}</div>
               <div className="text-xs font-bold text-slate-400">{card.label}</div>
               <Sparkline points={card.points} />
             </button>
           );
         })}
-      </div>
+        </div>
 
       <div className="grid grid-cols-1 gap-3 xl:grid-cols-[minmax(0,1.7fr)_minmax(280px,0.8fr)]">
         <section className="rounded-3xl border border-cyan-500/15 bg-[#061820] p-5">
@@ -296,7 +296,7 @@ export const AdminOverviewView: React.FC = () => {
                 <span className="text-2xl font-black">{totalOwners}</span>
                 <span className="text-[11px] text-slate-400">{arabic ? 'المجموع' : 'Total'}</span>
               </div>
-            </div>
+        </div>
             <ul className="space-y-3 text-sm">
               <li className="flex items-center gap-2">
                 <span className="h-2.5 w-2.5 rounded-full bg-cyan-400" />

@@ -1103,8 +1103,9 @@ export const registerAccount = async ({ name, email, password, phone }) => {
   if (String(password || '').length < 6) return { error: 'short_password' };
   const cleanPhone = cleanText(phone, 20);
   if (!cleanPhone) return { error: 'invalid_phone' };
-  if (adminEmail() && cleanEmail === adminEmail()) return { error: 'reserved_email' };
-  if (await accountByEmail(cleanEmail)) return { error: 'email_taken' };
+  // Do not reveal whether the email exists or is reserved (account enumeration).
+  if (adminEmail() && cleanEmail === adminEmail()) return { error: 'registration_failed' };
+  if (await accountByEmail(cleanEmail)) return { error: 'registration_failed' };
   const account = {
     id: `usr_${randomUUID()}`,
     name: cleanName,

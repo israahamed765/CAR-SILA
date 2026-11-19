@@ -26,8 +26,10 @@ export const IncomingCall: React.FC = () => {
   useEffect(() => {
     if (currentUser?.role !== 'owner') return;
     let stopped = false;
+    let busy = false;
     const load = async () => {
-      if (activeId.current || phaseRef.current !== 'incoming') return;
+      if (busy || activeId.current || phaseRef.current !== 'incoming') return;
+      busy = true;
       try {
         const data = await api<{ calls: CallView[] }>('/api/calls/incoming');
         const next = data.calls.find((item) => !dismissed.current.has(item.id)) || null;
@@ -37,6 +39,8 @@ export const IncomingCall: React.FC = () => {
         }
       } catch {
         if (!stopped && phaseRef.current === 'incoming') setCall(null);
+      } finally {
+        busy = false;
       }
     };
     void load();

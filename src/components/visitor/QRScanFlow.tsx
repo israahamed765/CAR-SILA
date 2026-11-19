@@ -7,14 +7,14 @@ import { ReturnCountdown } from '../common/QuickReturn';
 import { compressPhoto } from '../../lib/photo';
 import { ChatPhoto, readChatPhoto } from '../common/ChatPhoto';
 import { ReportCategory, VehicleStatus } from '../../types';
-import {
+import { 
   Car,
   Lightbulb,
   TriangleAlert,
   Package,
   Lock,
-  Send,
-  CheckCircle2,
+  Send, 
+  CheckCircle2, 
   ChevronRight,
   Globe,
   ArrowLeft,
@@ -238,7 +238,7 @@ export const QRScanFlow: React.FC = () => {
     if (report.id) setStep('success');
   };
 
-  return (
+    return (
     <div className="fixed inset-0 z-30 overflow-y-auto bg-[#041018] text-slate-100">
       <div className={`mx-auto flex min-h-full w-full flex-col px-3 py-4 sm:px-4 sm:py-6 ${step === 'reasons' ? 'max-w-6xl justify-start' : 'max-w-md justify-center'}`}>
         <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
@@ -318,7 +318,7 @@ export const QRScanFlow: React.FC = () => {
               }}
             >
               <p className="mb-2 text-center text-[11px] font-bold uppercase tracking-wider text-slate-500">{t('visitorOrType')}</p>
-              <input
+                  <input
                 value={code}
                 onChange={(event) => {
                   setCode(event.target.value);
@@ -579,7 +579,7 @@ export const QRScanFlow: React.FC = () => {
                   <Send className="h-4 w-4" />
                 </button>
               </form>
-            </div>
+        </div>
 
             <button
               type="button"

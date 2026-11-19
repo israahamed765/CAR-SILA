@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Siren } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { withCsrfHeaders } from '../../data/api';
 
 type SosKind = 'battery' | 'air' | 'tow';
 
@@ -101,7 +102,10 @@ export const SosAlarm: React.FC = () => {
       return;
     }
     let stop = false;
+    let busy = false;
     const look = () => {
+      if (busy) return;
+      busy = true;
       fetch('/api/sos', { credentials: 'include' })
         .then((response) => response.ok ? response.json() : null)
         .then((body) => {
@@ -125,7 +129,10 @@ export const SosAlarm: React.FC = () => {
             };
           }
         })
-        .catch(() => undefined);
+        .catch(() => undefined)
+        .finally(() => {
+          busy = false;
+        });
     };
     look();
     const timer = window.setInterval(look, 8000);
@@ -183,7 +190,7 @@ export const SosAlarm: React.FC = () => {
               void fetch('/api/sos/accept', {
                 method: 'POST',
                 credentials: 'include',
-                headers: { 'Content-Type': 'application/json' },
+                headers: withCsrfHeaders({ 'Content-Type': 'application/json' }),
                 body: JSON.stringify({ id })
               }).catch(() => undefined);
               setCurrentView('sos');

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { MapPin } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { readLocationChoice, saveLocationChoice } from '../../lib/locationChoice';
+import { withCsrfHeaders } from '../../data/api';
 
 const locate = () => new Promise<{ lat: number; lng: number }>((resolve, reject) => {
   if (!navigator.geolocation) {
@@ -18,7 +19,7 @@ const locate = () => new Promise<{ lat: number; lng: number }>((resolve, reject)
 const savePoint = (where: { lat: number; lng: number }) => fetch('/api/sos/help', {
   method: 'POST',
   credentials: 'include',
-  headers: { 'Content-Type': 'application/json' },
+  headers: withCsrfHeaders({ 'Content-Type': 'application/json' }),
   body: JSON.stringify({ active: true, ...where })
 });
 

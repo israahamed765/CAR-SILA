@@ -54,7 +54,7 @@ interface AppContextType {
   loginAdmin: (password: string) => Promise<void>;
   loginWithGoogle: (credential: string) => void;
   register: (name: string, email: string, password: string, phone: string) => void;
-  updateProfile: (name: string, email: string) => void;
+  updateProfile: (name: string, email: string) => Promise<void>;
   logout: () => void;
   allUsers: User[];
   users: User[];
@@ -164,7 +164,6 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   // Auth
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [accounts, setAccounts] = useState<StoredAccount[]>([]);
-  const knownEmails = useRef(new Set<string>());
 
   // Vehicles
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
@@ -433,10 +432,15 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
       invalid_credentials: ['البريد أو كلمة المرور غير صحيحة', 'Email or password is incorrect'],
       suspended: ['هذا الحساب موقوف ولا يمكنه الدخول', 'This account is suspended'],
       reserved_email: ['هذا البريد مخصص لإدارة المنصة', 'This email is reserved for the administrator'],
-      email_taken: ['هذا البريد مسجّل من قبل', 'This email is already registered'],
+      email_taken: ['تعذر حفظ البريد. جرّبي بريداً آخر', 'Could not save this email. Try a different one'],
+      registration_failed: [
+        'تعذر إنشاء الحساب. تحققي من البيانات أو جرّبي بريداً آخر',
+        'Could not create the account. Check your details or try a different email'
+      ],
       rate_limited: ['يمكنك إرسال بلاغ واحد لنفس السيارة كل دقيقة', 'You can send one report for this car each minute'],
       not_found: ['لا توجد سيارة مسجّلة بهذا الرمز', 'No registered car matches this code'],
       forbidden: ['هذه الصلاحية غير متاحة لهذا الحساب', 'This account cannot do that'],
+      csrf: ['انتهت صلاحية الحماية. حدّثي الصفحة وحاولي مرة ثانية', 'Security check expired. Refresh the page and try again'],
       invalid_input: ['البيانات المدخلة غير صالحة', 'The entered details are not valid'],
       invalid_email: ['البريد لازم يكون فيه @ مثل name@gmail.com', 'The email needs an @ sign, like name@gmail.com'],
       short_password: ['كلمة المرور لازم تكون 6 أحرف على الأقل', 'The password must be at least 6 characters'],
@@ -477,13 +481,18 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     localStorage.removeItem('carsila_session');
     localStorage.removeItem('carsila_auth_user');
     let stopped = false;
+    let busy = false;
     const load = (force = false) => {
-      if (!force && document.visibilityState === 'hidden') return;
+      if ((!force && document.visibilityState === 'hidden') || busy) return;
+      busy = true;
       api<Workspace>('/api/bootstrap')
         .then((data) => {
           if (!stopped) applyWorkspace(data);
         })
-        .catch(() => undefined);
+        .catch(() => undefined)
+        .finally(() => {
+          busy = false;
+        });
     };
     load(true);
     if (!needsLiveBootstrap(currentView)) {
@@ -507,10 +516,6 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   useEffect(() => {
     localStorage.setItem(VIEW_KEY, currentView);
   }, [currentView]);
-
-  useEffect(() => {
-    knownEmails.current = new Set(accounts.map((account) => account.email.toLowerCase()));
-  }, [accounts]);
 
   const setCurrentView = (view: AppView) => {
     const role = currentUser?.role;
@@ -590,12 +595,6 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     });
 
   const register = (name: string, email: string, password: string, phone: string) => {
-    const normalized = email.trim().toLowerCase();
-    if (knownEmails.current.has(normalized)) {
-      explain(new ApiError('email_taken'));
-      return;
-    }
-    knownEmails.current.add(normalized);
     api<Workspace>('/api/auth/register', { name, email, password, phone })
       .then((data) => {
         applyWorkspace(data);
@@ -607,20 +606,19 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
           'success'
         );
       })
-      .catch((error) => {
-        knownEmails.current.delete(normalized);
-        explain(error);
-      });
+      .catch(explain);
   };
 
-  const updateProfile = (name: string, email: string) => {
+  const updateProfile = (name: string, email: string) =>
     api<Workspace>('/api/profile', { name, email })
       .then((data) => {
         applyWorkspace(data);
         showToast(language === 'ar' ? 'تم حفظ التعديلات بنجاح' : 'Settings saved successfully', 'success');
       })
-      .catch(explain);
-  };
+      .catch((error) => {
+        explain(error);
+        throw error;
+      });
 
   const logout = () => {
     api<Workspace>('/api/auth/logout', {})

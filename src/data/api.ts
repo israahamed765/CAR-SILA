@@ -47,6 +47,23 @@ export const rememberVisitId = (id?: string) => {
   }
 };
 
+const CSRF_COOKIE = 'carsila_csrf';
+
+export const readCsrfToken = () => {
+  try {
+    const match = document.cookie.match(new RegExp(`(?:^|; )${CSRF_COOKIE}=([^;]*)`));
+    return match ? decodeURIComponent(match[1]) : '';
+  } catch {
+    return '';
+  }
+};
+
+export const withCsrfHeaders = (headers: Record<string, string> = {}) => {
+  const token = readCsrfToken();
+  if (token) headers['X-CSRF-Token'] = token;
+  return headers;
+};
+
 export type PublicVehicle = {
   qrToken: string;
   brand: string;
@@ -79,7 +96,10 @@ export async function api<T>(path: string, body?: unknown): Promise<T> {
   const visitId = readVisitId();
   const headers: Record<string, string> = {};
   if (visitId) headers['X-Car-Sila-Visit'] = visitId;
-  if (body !== undefined) headers['Content-Type'] = 'application/json';
+  if (body !== undefined) {
+    headers['Content-Type'] = 'application/json';
+    withCsrfHeaders(headers);
+  }
   const response = await fetch(path, {
     method: body === undefined ? 'GET' : 'POST',
     credentials: 'include',

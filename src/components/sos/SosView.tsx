@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BatteryCharging, LifeBuoy, Wind } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { withCsrfHeaders } from '../../data/api';
 import { saveLocationChoice } from '../../lib/locationChoice';
 
 type SosKind = 'battery' | 'air' | 'tow';
@@ -153,7 +154,7 @@ export const SosView: React.FC = () => {
       const response = await fetch(path, {
         method: 'POST',
         credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
+        headers: withCsrfHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify(body)
       });
       const payload = await response.json().catch(() => ({}));

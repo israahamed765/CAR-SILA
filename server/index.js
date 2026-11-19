@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs';
+import { randomUUID, timingSafeEqual } from 'node:crypto';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
@@ -75,33 +76,55 @@ const app = express();
 app.set('trust proxy', 1);
 app.disable('x-powered-by');
 
-const allowedOrigins = new Set(['http://localhost:5173', 'http://127.0.0.1:5173']);
-if (process.env.APP_URL && process.env.APP_URL !== 'MY_APP_URL') allowedOrigins.add(process.env.APP_URL);
+const allowedOrigins = new Set([
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'https://car-sila-sand.vercel.app'
+]);
+if (process.env.APP_URL && process.env.APP_URL !== 'MY_APP_URL') {
+  allowedOrigins.add(String(process.env.APP_URL).replace(/\/$/, ''));
+}
 
+// Strict allowlist only — no wildcard *.vercel.app / any localhost port (CORS Misconfiguration fix).
 const originAllowed = (origin) => {
-  if (!origin || allowedOrigins.has(origin)) return true;
-  try {
-    const host = new URL(origin).hostname;
-    return host === 'localhost' || host.endsWith('.vercel.app');
-  } catch {
-    return false;
-  }
+  if (!origin) return true;
+  return allowedOrigins.has(origin);
 };
+
+const contentSecurityPolicy = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline' https://accounts.google.com",
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://accounts.google.com",
+  "font-src 'self' https://fonts.gstatic.com data:",
+  "img-src 'self' data: blob: https://*.googleusercontent.com",
+  "connect-src 'self' https://accounts.google.com https://oauth2.googleapis.com",
+  "frame-src https://accounts.google.com",
+  "media-src 'self' blob:",
+  "worker-src 'self' blob:",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self' https://accounts.google.com",
+  "frame-ancestors 'none'"
+].join('; ');
 
 app.use(helmet({
   contentSecurityPolicy: false,
-  crossOriginResourcePolicy: { policy: 'cross-origin' }
+  crossOriginResourcePolicy: { policy: 'cross-origin' },
+  frameguard: false
 }));
 app.use(cors({
   origin(origin, callback) {
-    callback(null, originAllowed(origin));
+    if (!origin) return callback(null, true);
+    if (originAllowed(origin)) return callback(null, origin);
+    return callback(null, false);
   },
   credentials: true,
-  allowedHeaders: ['Content-Type', 'X-Car-Sila-Visit']
+  allowedHeaders: ['Content-Type', 'X-Car-Sila-Visit', 'X-CSRF-Token']
 }));
 app.use(express.json({ limit: '800kb' }));
 app.use(cookieParser());
 app.use((req, res, next) => {
+  res.setHeader('Content-Security-Policy', contentSecurityPolicy);
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('Referrer-Policy', 'no-referrer');
   res.setHeader('X-Frame-Options', 'DENY');
@@ -115,6 +138,46 @@ const cookieOptions = {
   secure: process.env.NODE_ENV === 'production',
   path: '/'
 };
+
+const CSRF_COOKIE = 'carsila_csrf';
+const csrfCookieOptions = {
+  ...cookieOptions,
+  httpOnly: false,
+  sameSite: 'strict'
+};
+
+const issueCsrfCookie = (req, res) => {
+  const current = String(req.cookies?.[CSRF_COOKIE] || '');
+  if (/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(current)) {
+    return current;
+  }
+  const token = randomUUID();
+  res.cookie(CSRF_COOKIE, token, { ...csrfCookieOptions, maxAge: 14 * 24 * 60 * 60 * 1000 });
+  return token;
+};
+
+const sameToken = (left, right) => {
+  if (!left || !right) return false;
+  const a = Buffer.from(String(left));
+  const b = Buffer.from(String(right));
+  return a.length === b.length && timingSafeEqual(a, b);
+};
+
+// Double-submit CSRF cookie: browser JS sends matching X-CSRF-Token on state-changing requests.
+app.use((req, res, next) => {
+  const method = req.method.toUpperCase();
+  if (method === 'GET' || method === 'HEAD' || method === 'OPTIONS') {
+    issueCsrfCookie(req, res);
+    return next();
+  }
+  const cookieToken = String(req.cookies?.[CSRF_COOKIE] || '');
+  const headerToken = String(req.headers['x-csrf-token'] || '');
+  if (!sameToken(cookieToken, headerToken)) {
+    return res.status(403).json({ error: 'csrf' });
+  }
+  issueCsrfCookie(req, res);
+  return next();
+});
 
 const clientAddress = (req) => ipKeyGenerator(req.ip || '');
 
@@ -200,16 +263,8 @@ const setSession = async (res, account) => {
 const fail = (res, error) => {
   console.error(error);
   if (res.headersSent) return;
-  const text = String(error?.message || error || '');
-  const missingTable = ['PGRST205', 'PGRST204', '42P01', '42703'].includes(error?.code);
-  const errorName = missingTable
-    ? 'schema_missing'
-    : /invalid api key|unauthorized|jwt/i.test(text)
-      ? 'bad_database_key'
-      : /not configured|fetch failed|enotfound|getaddrinfo/i.test(text)
-        ? 'bad_database_url'
-        : 'request_failed';
-  res.status(500).json({ error: errorName, reason: error?.code || text.slice(0, 180) });
+  // Do not leak internal codes/messages to clients (Verbose Error Exposure).
+  res.status(500).json({ error: 'request_failed' });
 };
 
 app.get('/api/bootstrap', async (req, res) => {
@@ -300,6 +355,7 @@ app.post('/api/auth/logout', async (req, res) => {
   try {
     await deleteSession(req.cookies.carsila_sid);
     res.clearCookie('carsila_sid', cookieOptions);
+    res.clearCookie(CSRF_COOKIE, csrfCookieOptions);
     await sendWorkspace(res, null, currentVisit(req));
   } catch (error) {
     fail(res, error);
@@ -592,7 +648,9 @@ app.post('/api/profile', async (req, res) => {
     if (!account) return;
     const result = await updateProfile(account, req.body || {});
     if (result.error) return res.status(400).json({ error: result.error });
-    await sendWorkspace(res, account, currentVisit(req));
+    // Reload account so workspace reflects the saved name/email.
+    const fresh = (await currentAccount(req)) || account;
+    await sendWorkspace(res, fresh, currentVisit(req));
   } catch (error) {
     fail(res, error);
   }
