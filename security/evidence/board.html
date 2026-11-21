@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CAR-SILA live security evidence — 2026-11-21</title>
+  <style>
+    body { margin: 0; font-family: Consolas, monospace; background: #020617; color: #e2e8f0; padding: 24px; }
+    h1 { color: #67e8f9; font-size: 22px; }
+    .grid { display: grid; gap: 16px; }
+    .card { border: 1px solid #164e63; border-radius: 12px; padding: 16px; background: #0f172a; }
+    .ok { color: #34d399; font-weight: bold; }
+    pre { white-space: pre-wrap; word-break: break-word; background: #020617; padding: 12px; border-radius: 8px; font-size: 13px; }
+    button { background: #22d3ee; border: 0; padding: 10px 14px; border-radius: 8px; font-weight: 700; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>CAR-SILA live evidence board</h1>
+  <p>Target: <span class="ok">https://car-sila-sand.vercel.app</span> · Date: 2026-11-21</p>
+  <p><button id="run">Run live checks</button></p>
+  <div class="grid" id="out"></div>
+  <script>
+    const out = document.getElementById('out');
+    const card = (title, body, ok) => {
+      const el = document.createElement('div');
+      el.className = 'card';
+      el.innerHTML = `<div class="${ok ? 'ok' : ''}">${title}</div><pre></pre>`;
+      el.querySelector('pre').textContent = body;
+      out.appendChild(el);
+    };
+    const interesting = (headers) => [...headers.entries()]
+      .filter(([k]) => /content-security|x-frame|x-content|referrer|permissions|content-type/i.test(k))
+      .map(([k,v]) => k + ': ' + v)
+      .join('\n') || '(no matching headers visible to JS — browser hides some; see curl evidence PNGs)';
+
+    document.getElementById('run').onclick = async () => {
+      out.innerHTML = '';
+      const home = await fetch('/?_=' + Date.now(), { cache: 'no-store' });
+      card('GET / status ' + home.status, interesting(home.headers), home.status === 200);
+
+      const api = await fetch('/api/bootstrap?_=' + Date.now(), { cache: 'no-store', credentials: 'include' });
+      card('GET /api/bootstrap status ' + api.status, interesting(api.headers) + '\n\nCSP(meta/http visible via curl evidence): see E1/E2 PNGs', api.ok);
+
+      const csrf = await fetch('/api/auth/login', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: '{}'
+      });
+      const body = await csrf.text();
+      card('POST /api/auth/login without CSRF → ' + csrf.status, body, csrf.status === 403 && body.includes('csrf'));
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+﻿HTTP/1.1 200 OK
+Accept-Ranges: bytes
+Access-Control-Allow-Origin: *
+Age: 174
+Cache-Control: public, max-age=0, must-revalidate
+Content-Disposition: inline
+Content-Length: 8954
+Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://accounts.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://accounts.google.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://*.googleusercontent.com; connect-src 'self' https://accounts.google.com https://oauth2.googleapis.com; frame-src https://accounts.google.com; media-src 'self' blob:; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self' https://accounts.google.com; frame-ancestors 'none'
+Content-Type: text/html; charset=utf-8
+Date: Sat, 21 Nov 2026 10:07:33 GMT
+Etag: "e5b5a263324f11fde14b7f5bb6316144"
+Last-Modified: Sat, 21 Nov 2026 10:04:39 GMT
+Permissions-Policy: camera=(self), microphone=(self), geolocation=(self)
+Referrer-Policy: no-referrer
+Server: Vercel
+Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+X-Vercel-Cache: HIT
+X-Vercel-Id: fra1::r4nxb-1795255653686-c9b85fb63e60
+

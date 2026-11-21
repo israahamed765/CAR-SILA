@@ -1,0 +1,28 @@
+﻿HTTP/1.1 200 OK
+Access-Control-Allow-Credentials: true
+Age: 0
+Cache-Control: public, max-age=0, must-revalidate
+Content-Length: 154
+Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://accounts.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://accounts.google.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://*.googleusercontent.com; connect-src 'self' https://accounts.google.com https://oauth2.googleapis.com; frame-src https://accounts.google.com; media-src 'self' blob:; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self' https://accounts.google.com; frame-ancestors 'none'
+Content-Type: application/json; charset=utf-8
+Cross-Origin-Opener-Policy: same-origin
+Cross-Origin-Resource-Policy: cross-origin
+Date: Sat, 21 Nov 2026 10:07:41 GMT
+Etag: W/"9a-HhmNpAM1hqzI3A/ukfN/dSnLkCs"
+Origin-Agent-Cluster: ?1
+Permissions-Policy: camera=(self), microphone=(self), geolocation=(self)
+Referrer-Policy: no-referrer
+Server: Vercel
+Set-Cookie: carsila_csrf=0d2817de-6263-482d-95cb-9065e0ecda8e; Max-Age=1209600; Path=/; Expires=Sat, 05 Dec 2026 10:07:34 GMT; Secure; SameSite=Strict
+Set-Cookie: carsila_visit=1daea93f-caa4-4fd2-860e-433cb0e30100; Max-Age=31536000; Path=/; Expires=Sun, 21 Nov 2027 10:07:36 GMT; Secure; SameSite=Lax
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+Vary: Origin
+X-Content-Type-Options: nosniff
+X-Dns-Prefetch-Control: off
+X-Download-Options: noopen
+X-Frame-Options: DENY
+X-Permitted-Cross-Domain-Policies: none
+X-Vercel-Cache: MISS
+X-Vercel-Id: fra1::iad1::fs94w-1795255654345-4f8cb595ab92
+X-Xss-Protection: 0
+

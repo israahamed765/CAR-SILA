@@ -1,0 +1,6 @@
+2026-11-21 12:00:57 +02:00
+live base: https://car-sila-sand.vercel.app
+csrfPass: 31/31
+methodPass: 3/3
+enumerationFlags: 0
+leakageFails: 0
