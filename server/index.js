@@ -163,12 +163,16 @@ const sameToken = (left, right) => {
   return a.length === b.length && timingSafeEqual(a, b);
 };
 
-// Double-submit CSRF cookie: browser JS sends matching X-CSRF-Token on state-changing requests.
+// Double-submit CSRF for every state-changing method (POST / PUT / PATCH / DELETE).
+// Safe methods only mint/refresh the cookie; mutating requests must match X-CSRF-Token.
 app.use((req, res, next) => {
   const method = req.method.toUpperCase();
   if (method === 'GET' || method === 'HEAD' || method === 'OPTIONS') {
     issueCsrfCookie(req, res);
     return next();
+  }
+  if (!['POST', 'PUT', 'PATCH', 'DELETE'].includes(method)) {
+    return res.status(405).json({ error: 'method_not_allowed' });
   }
   const cookieToken = String(req.cookies?.[CSRF_COOKIE] || '');
   const headerToken = String(req.headers['x-csrf-token'] || '');

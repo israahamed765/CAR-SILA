@@ -58,8 +58,9 @@ export default defineConfig(() => {
           "frame-ancestors 'none'"
         ].join('; '),
         'X-Content-Type-Options': 'nosniff',
-        'Referrer-Policy': 'strict-origin-when-cross-origin',
-        'X-Frame-Options': 'DENY'
+        'Referrer-Policy': 'no-referrer',
+        'X-Frame-Options': 'DENY',
+        'Permissions-Policy': 'camera=(self), microphone=(self), geolocation=(self)'
       }
     },
   };

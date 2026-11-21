@@ -92,16 +92,21 @@ export const toVisitorVehicle = (vehicle: PublicVehicle): Vehicle => ({
   returnAt: vehicle.returnAt
 });
 
-export async function api<T>(path: string, body?: unknown): Promise<T> {
+/** State-changing API helper. Always attaches double-submit CSRF on non-GET methods. */
+export async function api<T>(
+  path: string,
+  body?: unknown,
+  method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' = body === undefined ? 'GET' : 'POST'
+): Promise<T> {
   const visitId = readVisitId();
   const headers: Record<string, string> = {};
   if (visitId) headers['X-Car-Sila-Visit'] = visitId;
-  if (body !== undefined) {
-    headers['Content-Type'] = 'application/json';
-    withCsrfHeaders(headers);
-  }
+  const verb = method.toUpperCase();
+  const mutating = verb !== 'GET' && verb !== 'HEAD' && verb !== 'OPTIONS';
+  if (body !== undefined) headers['Content-Type'] = 'application/json';
+  if (mutating) withCsrfHeaders(headers);
   const response = await fetch(path, {
-    method: body === undefined ? 'GET' : 'POST',
+    method: verb,
     credentials: 'include',
     headers,
     body: body === undefined ? undefined : JSON.stringify(body)

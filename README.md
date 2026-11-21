@@ -33,7 +33,7 @@ A new report or message raises a short notice near the top of the page. It disap
 
 ## Privacy and security
 
-CAR-SILA was hardened with the same web-security mindset used in academic security work: find the weakness on the live product, prove it, then close it.
+CAR-SILA was reviewed with a find → prove → fix → re-test loop on specific weaknesses. That does **not** mean the product is “100% secure.” It means the issues found inside the current test scope were closed, and further review is still expected.
 
 Privacy stays first.
 
@@ -43,25 +43,51 @@ Privacy stays first.
 - Report emails do not place the sender’s email address in the message body.
 - Owners sign in with email and password, or with Google. The administrator signs in with email and password only.
 
-### Security hardening applied
+### Security hardening applied (within current scope)
 
 | Area | What was secured |
 | --- | --- |
 | Account enumeration | Registration no longer reveals whether an email is already registered |
-| Content Security Policy | CSP headers limit scripts, frames, and trusted external sources |
+| Content Security Policy | Same CSP / baseline headers on the UI (static pages + assets via Vercel routes) and on the API (Express) |
 | Error disclosure | API failures return a generic error to clients; details stay in server logs |
 | CORS | Cross-origin access is limited to an explicit allowlist, not open wildcards |
-| CSRF | State-changing requests require a matching CSRF token with the session |
-| Dependencies | Known package advisories were cleared with `npm audit` / `npm audit fix` |
+| CSRF | `POST` / `PUT` / `PATCH` / `DELETE` require a matching double-submit CSRF token |
+| Dependencies | Known package advisories were cleared with `npm audit` / `npm audit fix` (re-check dated evidence under `security/`) |
 
 Also in place:
 
 - Rate limits on sensitive routes
-- Baseline security headers (`CSP`, `X-Frame-Options`, `Referrer-Policy`, and related controls)
+- Baseline security headers (`CSP`, `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`) on both UI and API paths
 - Server-only secrets (`.env` is never committed)
 - Cookie-based sessions with careful cross-origin rules
 
-The goal is simple: keep communication useful, keep personal data hidden, and keep common web attacks out of the product path.
+### Test scope (what was covered / what was not)
+
+**Covered in this round**
+
+- Live and local checks for account-enumeration signals on registration
+- CSP and related security headers on API responses; UI/static header parity fixed after external review
+- Generic API error responses (no stack / internal detail to the client) on the paths exercised in testing
+- CORS allowlist behavior against untrusted origins
+- CSRF double-submit on state-changing browser calls used by the app
+- `npm audit` dependency review inside the project tree
+
+**How it was tested**
+
+- Browser DevTools (Network / Response Headers) on the live site and local app
+- Crafted `Origin` / CSRF mismatch requests against the API
+- Local attacker-page style CORS checks where relevant
+- `npm audit` before/after dependency fixes
+
+**Not fully covered yet (needs deeper or privileged review)**
+
+- CSRF on every mutating route under all auth roles with a dedicated test account matrix
+- Account enumeration across every auth-related message path and timing side channel
+- Error-disclosure review of every API path and failure mode
+- Authenticated deep review with a mentor/test account and full source walkthrough
+- Continuous SCA beyond the dated `npm audit` snapshot in `security/`
+
+Wording used in reports and this README: *specific findings inside the stated scope were fixed*; ongoing testing and review remain necessary.
 
 ## Stack
 
