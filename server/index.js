@@ -303,10 +303,12 @@ app.post('/api/auth/login', authLimiter, async (req, res) => {
     const email = String(req.body?.email || '').trim().toLowerCase();
     const result = await loginAccount(email, req.body?.password);
     if (result.error) {
+      // Log suspended separately server-side, but never tell the client —
+      // distinct codes would enable account-state enumeration.
       if (result.error === 'invalid_credentials' || result.error === 'suspended') {
         await recordFailedLogin(email === adminEmail() ? 'admin' : result.error === 'suspended' ? 'suspended' : 'account');
       }
-      return res.status(401).json({ error: result.error });
+      return res.status(401).json({ error: 'invalid_credentials' });
     }
     if (result.account.role === 'admin') {
       const eightHours = 8 * 60 * 60 * 1000;
@@ -821,6 +823,20 @@ app.get('/api/sos/summary', async (req, res) => {
   } catch (error) {
     fail(res, error);
   }
+});
+
+// Unknown API paths: JSON only (no Express HTML "Cannot GET /api/...").
+app.use('/api', (_req, res) => {
+  res.status(404).json({ error: 'not_found' });
+});
+
+// Never leak parser/stack details from bad JSON or unexpected middleware errors.
+app.use((err, _req, res, next) => {
+  if (res.headersSent) return next(err);
+  if (err instanceof SyntaxError || err?.type === 'entity.parse.failed') {
+    return res.status(400).json({ error: 'invalid_input' });
+  }
+  return fail(res, err);
 });
 
 const port = Number(process.env.PORT) || 8787;

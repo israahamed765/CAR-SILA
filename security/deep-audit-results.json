@@ -1,0 +1,557 @@
+{
+  "base": "https://car-sila-sand.vercel.app",
+  "startedAt": "2026-11-21T10:00:18.787Z",
+  "csrf": [
+    {
+      "path": "/api/auth/register",
+      "noToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "badToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "pass": true
+    },
+    {
+      "path": "/api/auth/login",
+      "noToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "badToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "pass": true
+    },
+    {
+      "path": "/api/auth/admin",
+      "noToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "badToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "pass": true
+    },
+    {
+      "path": "/api/auth/google",
+      "noToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "badToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "pass": true
+    },
+    {
+      "path": "/api/auth/logout",
+      "noToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "badToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "pass": true
+    },
+    {
+      "path": "/api/public/reports",
+      "noToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "badToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "pass": true
+    },
+    {
+      "path": "/api/public/calls",
+      "noToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "badToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "pass": true
+    },
+    {
+      "path": "/api/public/calls/ice",
+      "noToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "badToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "pass": true
+    },
+    {
+      "path": "/api/public/calls/end",
+      "noToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "badToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "pass": true
+    },
+    {
+      "path": "/api/public/messages",
+      "noToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "badToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "pass": true
+    },
+    {
+      "path": "/api/translate",
+      "noToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "badToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "pass": true
+    },
+    {
+      "path": "/api/vehicles",
+      "noToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "badToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "pass": true
+    },
+    {
+      "path": "/api/vehicles/delete",
+      "noToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "badToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "pass": true
+    },
+    {
+      "path": "/api/vehicles/clear",
+      "noToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "badToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "pass": true
+    },
+    {
+      "path": "/api/vehicles/return",
+      "noToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "badToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "pass": true
+    },
+    {
+      "path": "/api/vehicles/status",
+      "noToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "badToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "pass": true
+    },
+    {
+      "path": "/api/vehicles/token",
+      "noToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "badToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "pass": true
+    },
+    {
+      "path": "/api/reports/status",
+      "noToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "badToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "pass": true
+    },
+    {
+      "path": "/api/messages",
+      "noToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "badToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "pass": true
+    },
+    {
+      "path": "/api/profile",
+      "noToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "badToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "pass": true
+    },
+    {
+      "path": "/api/admin/users/status",
+      "noToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "badToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "pass": true
+    },
+    {
+      "path": "/api/messages/read",
+      "noToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "badToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "pass": true
+    },
+    {
+      "path": "/api/notifications/read",
+      "noToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "badToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "pass": true
+    },
+    {
+      "path": "/api/push/subscribe",
+      "noToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "badToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "pass": true
+    },
+    {
+      "path": "/api/push/unsubscribe",
+      "noToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "badToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "pass": true
+    },
+    {
+      "path": "/api/sos/help",
+      "noToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "badToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "pass": true
+    },
+    {
+      "path": "/api/sos/request",
+      "noToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "badToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "pass": true
+    },
+    {
+      "path": "/api/sos/accept",
+      "noToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "badToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "pass": true
+    },
+    {
+      "path": "/api/sos/close",
+      "noToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "badToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "pass": true
+    },
+    {
+      "path": "/api/sos/message",
+      "noToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "badToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "pass": true
+    },
+    {
+      "path": "/api/calls/signal",
+      "noToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "badToken": {
+        "status": 403,
+        "error": "csrf",
+        "leak": []
+      },
+      "pass": true
+    }
+  ],
+  "methods": [
+    {
+      "method": "PUT",
+      "status": 403,
+      "error": "csrf",
+      "pass": true
+    },
+    {
+      "method": "PATCH",
+      "status": 403,
+      "error": "csrf",
+      "pass": true
+    },
+    {
+      "method": "DELETE",
+      "status": 403,
+      "error": "csrf",
+      "pass": true
+    }
+  ],
+  "enumeration": [
+    {
+      "case": "register_unknown_email",
+      "status": 200,
+      "error": null,
+      "note": "Should be validation or registration_failed / create — not email_taken"
+    },
+    {
+      "case": "register_possible_existing_or_reserved",
+      "status": 200,
+      "error": null,
+      "note": "Must not return email_taken"
+    },
+    {
+      "case": "login_unknown_email",
+      "status": 401,
+      "error": "invalid_credentials",
+      "note": "Expect invalid_credentials only"
+    },
+    {
+      "case": "login_invalid_format",
+      "status": 401,
+      "error": "invalid_credentials"
+    },
+    {
+      "case": "login_error_code_consistency",
+      "codes": [
+        "invalid_credentials",
+        "invalid_credentials"
+      ],
+      "pass": true
+    },
+    {
+      "case": "register_never_email_taken",
+      "pass": true,
+      "errors": [
+        null,
+        null
+      ]
+    }
+  ],
+  "errorLeakage": [
+    {
+      "case": "invalid_json_login",
+      "status": 400,
+      "contentType": "text/html; charset=utf-8",
+      "error": null,
+      "bodyPreview": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Bad Request</pre>\n</body>\n</html>\n",
+      "leaks": [],
+      "pass": true
+    },
+    {
+      "case": "unknown_api_path",
+      "status": 404,
+      "contentType": "text/html; charset=utf-8",
+      "error": null,
+      "bodyPreview": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot GET /api/does-not-exist-1795255255732</pre>\n</body>\n</html>\n",
+      "leaks": [],
+      "pass": true
+    },
+    {
+      "case": "bootstrap_get",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "error": null,
+      "bodyPreview": "{\"user\":null,\"vehicles\":[],\"reports\":[],\"conversations\":[],\"notifications\":[],\"activities\":[],\"users\":[],\"visitId\":\"acc7d4b3-3fb8-4190-b168-51a4739d6ce1\"}",
+      "leaks": [],
+      "pass": true
+    },
+    {
+      "case": "vehicle_missing",
+      "status": 404,
+      "contentType": "application/json; charset=utf-8",
+      "error": "not_found",
+      "bodyPreview": "{\"error\":\"not_found\"}",
+      "leaks": [],
+      "pass": true
+    },
+    {
+      "case": "translate_empty",
+      "status": 400,
+      "contentType": "application/json; charset=utf-8",
+      "error": "invalid_input",
+      "bodyPreview": "{\"error\":\"invalid_input\"}",
+      "leaks": [],
+      "pass": true
+    }
+  ],
+  "summary": {
+    "csrfTotal": 31,
+    "csrfPass": 31,
+    "csrfFail": [],
+    "methodPass": 3,
+    "enumerationFlags": [],
+    "leakageFails": []
+  },
+  "finishedAt": "2026-11-21T10:00:57.602Z"
+}

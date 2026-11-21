@@ -1063,10 +1063,11 @@ export const updateProfile = async (account, input) => {
   const name = cleanText(input.name, 80);
   const email = cleanText(input.email, 120).toLowerCase();
   if (!name || !email || !email.includes('@')) return { error: 'invalid_input' };
-  if (account.role === 'admin' && email !== adminEmail()) return { error: 'reserved_email' };
-  if (account.role !== 'admin' && adminEmail() && email === adminEmail()) return { error: 'reserved_email' };
+  if (account.role === 'admin' && email !== adminEmail()) return { error: 'profile_failed' };
+  if (account.role !== 'admin' && adminEmail() && email === adminEmail()) return { error: 'profile_failed' };
   const taken = await accountByEmail(email);
-  if (taken && taken.id !== account.id) return { error: 'email_taken' };
+  // Same client code whether the email is taken or reserved — avoids account enumeration via profile save.
+  if (taken && taken.id !== account.id) return { error: 'profile_failed' };
   must(await supabase().from('accounts').update({ name, email }).eq('id', account.id));
   must(await supabase().from('vehicles').update({ owner_name: name }).eq('owner_id', account.id));
   return { ok: true };

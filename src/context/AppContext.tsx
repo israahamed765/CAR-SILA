@@ -433,6 +433,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
       suspended: ['هذا الحساب موقوف ولا يمكنه الدخول', 'This account is suspended'],
       reserved_email: ['هذا البريد مخصص لإدارة المنصة', 'This email is reserved for the administrator'],
       email_taken: ['تعذر حفظ البريد. جرّبي بريداً آخر', 'Could not save this email. Try a different one'],
+      profile_failed: ['تعذر حفظ الملف الشخصي. جرّبي بريداً آخر', 'Could not save the profile. Try a different email'],
       registration_failed: [
         'تعذر إنشاء الحساب. تحققي من البيانات أو جرّبي بريداً آخر',
         'Could not create the account. Check your details or try a different email'

@@ -79,12 +79,26 @@ Also in place:
 - Local attacker-page style CORS checks where relevant
 - `npm audit` before/after dependency fixes
 
-**Not fully covered yet (needs deeper or privileged review)**
+**Deeper pass (21 Nov 2026)** — scripted external audit in `security/deep-audit.mjs` against the live site, plus code review:
 
-- CSRF on every mutating route under all auth roles with a dedicated test account matrix
-- Account enumeration across every auth-related message path and timing side channel
-- Error-disclosure review of every API path and failure mode
-- Authenticated deep review with a mentor/test account and full source walkthrough
+| Check | Result |
+| --- | --- |
+| CSRF without / with bad token on 31 mutating `POST` routes | All returned `403` + `csrf` |
+| `PUT` / `PATCH` / `DELETE` on a sample mutating path | Blocked (`403` CSRF) |
+| Registration / login client error codes for unknown emails | No `email_taken`; login uses `invalid_credentials` |
+| Response body leak hints (stacks, Supabase, `ENOTFOUND`, …) on probed paths | None in JSON API bodies |
+
+Hardening added after that pass:
+
+- Login no longer returns a distinct `suspended` code to the client (server still logs it)
+- Profile save no longer returns `email_taken` / `reserved_email` (uses `profile_failed`)
+- Unknown `/api/*` paths and bad JSON bodies return compact JSON errors, not Express HTML pages
+
+**Still out of scope / residual**
+
+- Full authenticated matrix with owner + admin trial accounts (mentor-assisted)
+- Timing side channels on login/register
+- Product codes that are intentionally specific after auth (e.g. `plate_taken` when adding a vehicle)
 - Continuous SCA beyond the dated `npm audit` snapshot in `security/`
 
 Wording used in reports and this README: *specific findings inside the stated scope were fixed*; ongoing testing and review remain necessary.
